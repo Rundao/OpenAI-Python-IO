@@ -19,6 +19,7 @@ class MessageQueue:
     """
     def __init__(self):
         self._queue = asyncio.Queue()
+        self.last_user_input: str = ""  # 存储最后一次用户输入
 
     async def put(self, message: Message):
         """

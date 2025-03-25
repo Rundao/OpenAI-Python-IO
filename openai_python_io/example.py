@@ -4,54 +4,38 @@ OpenAI Python I/O 使用示例。
 """
 
 from openai_python_io import sse_print, sse_input
-import asyncio
 import time
 
 def main():
-    """主函数，展示基本用法"""
-    print("服务已启动，请在前端发起 /v1/chat/completions 请求以建立 SSE 连接...")
+    """主函数，展示SSE print和input的基本用法"""
+    print("Server started. Please initiate a /v1/chat/completions request to establish SSE connection...")
     
-    # 演示基本输出
-    sse_print("这是一条测试消息")
-    time.sleep(1)  # 模拟一些处理时间
+    # 测试基本输出功能
+    sse_print("Basic output test", "测试基本输出", sep=" | ")
+    time.sleep(1)
     
-    # 演示多条消息
-    sse_print("这是\n\n第一条消息")
-    time.sleep(0.5)
-    sse_print("这是第二\n\n条消息")
-    time.sleep(0.5)
-    sse_print("这是第三条\n\n消息")
+    # 测试多个值和特殊字符
+    sse_print("Numbers:", 42, 3.14, "Special chars:", "@#$%", "中文字符", sep=" -> ")
+    time.sleep(1)
     
-    # 演示用户输入
-    name = sse_input("请输入您的名字：")
-    sse_print(f"你好，{name}！")
+    # 测试不换行输出
+    sse_print("This is ", end="")
+    sse_print("a single ", end="")
+    sse_print("line output")
+    time.sleep(1)
     
-    # 演示计算器功能
+    # 测试用户输入
+    name = sse_input("Please enter your name (请输入您的名字): ")
+    sse_print(f"Hello 你好, {name}!")
+    
+    # 测试简单的输入反馈循环
     while True:
-        expression = sse_input(
-            "请输入一个算术表达式（例如：1 + 1），输入 'q' 退出："
-        )
-        
-        if expression.lower() == 'q':
+        text = sse_input("Enter some text (or 'q' to quit): ")
+        if text.lower() == 'q':
             break
-            
-        try:
-            # 注意：在实际应用中应该使用更安全的方式计算表达式
-            result = eval(expression)
-            sse_print(f"计算结果：{result}")
-        except Exception as e:
-            sse_print(f"计算错误：{str(e)}")
+        sse_print("You entered (您输入了):", text)
     
-    sse_print("演示结束，感谢使用！")
-
-def test_chinese():
-    """测试中文支持"""
-    sse_print("测试中文输出功能")
-    sse_print("这是一段中文文本，包含特殊字符：！@#￥%……&*（）")
-    name = sse_input("请输入一些中文：")
-    sse_print(f"您输入的中文是：{name}")
+    sse_print("Demo complete! 演示结束！")
 
 if __name__ == "__main__":
     main()
-    # 取消注释下面的行来测试中文支持
-    # test_chinese()

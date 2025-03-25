@@ -54,8 +54,10 @@ Send POST request to `http://localhost:2122/v1/chat/completions` with SSE connec
 
 ## API Reference
 
-### sse_print(content: str)
-Stream content to frontend via SSE. Messages are automatically paginated.
+### sse_print(*values, sep: str = " ", end: str = "\n")
+Stream content to frontend via SSE.
+- When end is the default "\n", adds pagination "\n\n---\n\n"
+- When end is specified, uses the given ending
 
 ### sse_input(prompt: str = "") -> str
 Wait for and get user input. Sends a special marker to notify frontend that user input is required.
@@ -65,8 +67,22 @@ Wait for and get user input. Sends a special marker to notify frontend that user
 Check `openai_python_io/example.py` for complete usage examples including:
 - Basic message output
 - User input handling
-- Chinese support test
-- Simple calculator application
+- Chinese and Symbol support
+
+### Run the example:
+```bash
+python -m openai_python_io.example
+```
+
+### Cherry Studio Example
+
+Use with [Cherry Studio](https://github.com/CherryHQ/cherry-studio) as an example:
+
+1. Configuration:
+![Configuration](docs/images/config.png)
+
+2. Example usage:
+![Example](docs/images/example.png)
 
 ## Project Structure
 

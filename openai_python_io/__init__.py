@@ -22,14 +22,23 @@ def ensure_server_running():
         _server_thread.start()
         _server_started.wait()  # 等待服务器启动完成
 
-def sse_print(content: str) -> None:
+def sse_print(*values, sep: str = " ", end: str = "\n") -> None:
     """
     替代 Python 的 print 函数，将内容以 SSE 流式方式发送给前端。
     
     Args:
-        content: 要发送的内容
+        *values: 要打印的值
+        sep: 值之间的分隔符,默认是空格
+        end: 结尾字符,默认是换行符
     """
     ensure_server_running()
+    # 将多个值转换为字符串并用分隔符连接
+    content = sep.join(str(value) for value in values)
+    # 根据 end 参数决定是否添加分行符
+    if end == "\n":
+        content += "\n\n---\n\n"
+    else:
+        content += end
     asyncio.run(send_message(content))
 
 def sse_input(prompt: str = "") -> str:
@@ -45,6 +54,9 @@ def sse_input(prompt: str = "") -> str:
     ensure_server_running()
     if prompt:
         asyncio.run(send_message(prompt))
-    return asyncio.run(wait_for_input())
+    result = asyncio.run(wait_for_input())
+    # 发送确认消息
+    asyncio.run(send_message("Input received\n\n---\n\n"))
+    return result
 
 __all__ = ['sse_print', 'sse_input']
